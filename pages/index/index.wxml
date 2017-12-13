@@ -1,0 +1,91 @@
+ <view class="{{now.code>=9?'container cloudy-bg':'container sunny-bg'}}">
+  <view class="top">
+    <text class="address" bindtap="modalShow">{{address}}</text>
+    <view class="refresh" bindtap="init">
+      <text class="refresh-time">{{refresh_time}}</text>更新
+      <image class="{{refreshFlag?'rotate':''}}" src="../../lib/images/refresh.png"></image>
+    </view>
+  </view>
+
+  <view class="main">
+    <view class="weather-wrap">
+      <view class="info-box">
+        <view class="now-temperature">{{now.temperature}}°</view>
+        <view class="temp-range">
+          <text class="low-temp">{{future[0].low}}°</text>/
+          <text class="high-temp">{{future[0].high}}°</text>
+        </view>
+        <view class="air-quality">
+          <text class="aqi">{{now.air_quality.city.aqi}}</text>
+          <text class="quality">{{now.air_quality.city.quality}}</text>
+        </view>
+      </view>
+      <view class="info-box">
+        <view>
+          <image src="../../lib/images/{{now.code}}.png"></image>
+        </view>
+        <view class="temp-range">
+          <text class="weather-text">{{now.text}}</text>
+        </view>
+        <view class="air-quality">
+          <text class="wind-scale">{{now.wind_scale}}</text>级
+          <text class="wind-name"><text wx:if="{{now.wind_scale<=3}}">微</text>
+          <text wx:elif="{{now.wind_scale>3&&now.wind_scale<=6}}">清</text>
+          <text wx:else>大</text>风</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="canvas-wrap">
+    <view>
+      <view class="canvas-view">
+      <canvas hidden="{{canvasShow}}" canvas-id="lineCanvas" disable-scroll="true" class="canvas" bindtouchstart="touchHandler"></canvas>
+      </view>
+      <view class="label">
+        <view wx:for="{{future}}" wx:key="index" class="label-box">
+          <image style="width:20px;height:20px;" src="../../lib/images/{{item.code1}}.png"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<modal hidden="{{hidden}}" title="选择地区" confirm-text="确定" cancel-text="取消" bindcancel="cancel" bindconfirm="confirm">
+  <view class="option">
+    <view class="section">
+      <text>自动定位:</text>
+      <switch checked="{{autoPosition}}" bindchange="switch1Change" />
+    </view>
+    <view class="section">
+      <text>手动选择:</text>
+      <switch checked="{{!autoPosition}}" bindchange="switch2Change" />
+    </view>
+    <view class="section position-wrap">
+      <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+        <button disabled="{{autoPosition}}" size="mini" type="primary">选择位置</button>
+      </picker>
+      <text class="position-selector">{{region[0]}}，{{region[1]}}，{{region[2]}}</text>
+    </view>
+  </view>
+</modal>
+<view class="weather-bg">
+ <image class="sunny" wx:if="{{now.code<=3?true:false}}" src="../../lib/images/sunny.png"></image> 
+ <image class="cloud1" wx:if="{{now.code>=3&&now.code<=9?true:false}}" src="../../lib/images/cloud.png"></image>
+<image class="cloud2" wx:if="{{now.code>=3&&now.code<=9?true:false}}" src="../../lib/images/cloud.png"></image> 
+ <image wx:if="{{now.code>=10&&now.code<=20?true:false}}" src="../../lib/images/rain.gif"></image> 
+</view> 
+
+<view class="loading" wx:if="{{loadingFlag}}">
+  <view class="loading-container">
+  <view class="stick-wrap">
+		<view class="stick"></view>
+		<view class="stick"></view>
+		<view class="stick"></view>
+		<view class="stick"></view>
+		<view class="stick"></view>
+		<view class="stick"></view>
+</view>
+		<view class="loading-text">Loading...</view>
+
+	</view>
+</view>

@@ -1,0 +1,19 @@
+<view>
+  <modal hidden="{{hidden}}" title="选择地区" confirm-text="确定" cancel-text="取消" bindcancel="cancel" bindconfirm="confirm">
+    <view class="option">
+      <view class="section">
+        <text>自动定位:</text>
+        <switch checked="{{autoPosition}}" bindchange="switch1Change" />
+      </view>
+      <view class="section">
+        <text>手动选择:</text>
+        <switch checked="{{!autoPosition}}" bindchange="switch2Change" />
+      </view>
+      <view class="section">
+        <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+          <button disabled="{{autoPosition}}" size="mini" type="primary">选择位置</button>
+        </picker>{{region[0]}}，{{region[1]}}，{{region[2]}}
+      </view>
+    </view>
+  </modal>
+</view>
