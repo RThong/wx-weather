@@ -6,7 +6,7 @@
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#36749d",
-    "navigationBarTitleText": "wx-weather",
+    "navigationBarTitleText": "番茄天气",
     "navigationBarTextStyle":"#fff"
   }
 }

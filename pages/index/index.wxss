@@ -9,13 +9,12 @@ page {
 }
 
 .cloudy-bg {
-  /* background: linear-gradient(to bottom, #6f979f, #5d8c96 60%, #619497); */
   background: #6f979f;
 }
 
 .weather-bg {
   width: 100%;
-  height: 480rpx;
+  height: 50%;
   position: fixed;
   left: 0;
   top: 0;
@@ -105,6 +104,8 @@ page {
 }
 
 .top .address::before {
+  position: relative;
+  z-index: 99;
   font-size: 12px;
   margin-right: 15rpx;
   font-family: 'iconfont';
@@ -145,11 +146,6 @@ page {
 
 .weather-wrap .info-box view:nth-child(1) {
   font-size: 80px;
-}
-
-.weather-wrap .info-box image {
-  width: 60px;
-  height: 60px;
 }
 
 .weather-wrap .info-box view:nth-child(2),
@@ -232,11 +228,12 @@ modal .position-wrap .position-selector {
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, #36749d, #5aa9b8 60%, #76b9b2);
+  
   display: flex;
 	align-items: center;
 	justify-content: center;
 }
+
 .loading-text{
 	font-family: 'Lato';
 	color: #fff;

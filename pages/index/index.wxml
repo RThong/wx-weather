@@ -22,7 +22,9 @@
       </view>
       <view class="info-box">
         <view>
-          <image src="../../lib/images/{{now.code}}.png"></image>
+          <image wx:if="{{now.code == 21}}" style="width:55px;height:70px;" src="../../lib/images/{{now.code}}.png"></image>
+          <image wx:elif="{{now.code == 9}}" style="width:72px;height:50px;" src="../../lib/images/{{now.code}}.png"></image>
+          <image wx:else style="width:60px;height:60px;" src="../../lib/images/{{now.code}}.png"></image>
         </view>
         <view class="temp-range">
           <text class="weather-text">{{now.text}}</text>
@@ -44,7 +46,7 @@
       </view>
       <view class="label">
         <view wx:for="{{future}}" wx:key="index" class="label-box">
-          <image style="width:20px;height:20px;" src="../../lib/images/{{item.code1}}.png"></image>
+          <image style="{{item.code1==9?'width:20px;height:14px;margin-top:5px;':'width:20px;height:20px;'}}" src="../../lib/images/{{item.code1}}.png"></image>
         </view>
       </view>
     </view>
@@ -71,11 +73,12 @@
 <view class="weather-bg">
  <image class="sunny" wx:if="{{now.code<=3?true:false}}" src="../../lib/images/sunny.png"></image> 
  <image class="cloud1" wx:if="{{now.code>=3&&now.code<=9?true:false}}" src="../../lib/images/cloud.png"></image>
-<image class="cloud2" wx:if="{{now.code>=3&&now.code<=9?true:false}}" src="../../lib/images/cloud.png"></image> 
- <image wx:if="{{now.code>=10&&now.code<=20?true:false}}" src="../../lib/images/rain.gif"></image> 
+<image class="cloud2" wx:if="{{now.code>=3&&now.code<=9?true:false}}" src="../../lib/images/cloud.png"></image>
+ <canvas style="width:100%;height:100%;" hidden="{{now.code>=10&&now.code<=20?false:true}}" canvas-id="rainCanvas" id="canvas1"></canvas>
+ <canvas style="width:100%;height:100%;" hidden="{{now.code>=21&&now.code<=25?false:true}}" canvas-id="snowCanvas" id="canvas2"></canvas>
 </view> 
 
-<view class="loading" wx:if="{{loadingFlag}}">
+<!-- <view class="{{now.code>=9?'loading cloudy-bg':'loading sunny-bg'}}" wx:if="{{loadingFlag}}">
   <view class="loading-container">
   <view class="stick-wrap">
 		<view class="stick"></view>
@@ -88,4 +91,4 @@
 		<view class="loading-text">Loading...</view>
 
 	</view>
-</view>
+</view> -->
