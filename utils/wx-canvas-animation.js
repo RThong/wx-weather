@@ -4,11 +4,13 @@ function DropAnimation(options) {
   this.speed = options.speed
   this.color = options.color
   this.count = options.count
+  this.width = options.width
+  this.height = options.height
   this.timer = ''
   this.dropArr = []
   wx.createSelectorQuery().select(options.el).boundingClientRect((res) => {
-    this.width = res.width
-    this.height = res.height
+    // this.width = res.width
+    // this.height = res.height
   }).exec(() => {
 
     if (options.type == 'rain') {

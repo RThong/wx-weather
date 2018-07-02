@@ -12,14 +12,11 @@ Page({
     refresh_time: '',
     now: '',//现在天气
     future: [],//未来天气
-    days: 7,//取几天数据
     hidden: true,
     autoPosition: true,
     region: ['北京市', '北京市', '东城区'],
     canvasShow: false,//模态框弹出,表格消失
-    loadingFlag: true,
-    canvasAnimationHasShow: false,
-    canvasAnimation: null,//canvas动画对象
+    loadingFlag: true
   },
   onLoad: function (e) {
     this.init();
@@ -29,7 +26,9 @@ Page({
       speed: 4,
       color: '#cccccc',
       type: 'rain',
-      count: 10
+      count: 10,
+      width: 750,
+      height: 200
     })
 
     new DropAnimation({
@@ -38,7 +37,9 @@ Page({
       speed: 1,
       color: '#cccccc',
       type: 'snow',
-      count: 15
+      count: 15,
+      width: 750,
+      height: 200
     })
 
   },
@@ -51,10 +52,10 @@ Page({
     });
   },
   //获取城市id
-  getCityId(city_name, area_name){
-    let arr1 = [], arr2 = [], area, city
+  getCityId(city_name, region_name){
+    let arr1 = [], arr2 = [], region, city
     cityList.map(item => {
-      if (item.countyname.indexOf(area_name) !== -1){
+      if (item.countyname.indexOf(region_name) !== -1){
         arr1.push(item)
       }
       if (item.countyname.indexOf(city_name) !== -1) {
@@ -63,7 +64,7 @@ Page({
     })
     if(arr1.length === 1){
       return {
-        arae: arr1[0],//只匹配到一个地名
+        region: arr1[0],//只匹配到一个地名
         city
       }
     }
@@ -83,194 +84,116 @@ Page({
             min = item
           }
           else{
-            min = item < min? item:min
-            minIndex = index
+            if(item < min){
+              min = item
+              minIndex = index
+            }
           }
         }
       })
       return {
-        area: arr1[minIndex],
+        region: arr1[minIndex],
         city
       }
     }
   },
   //选择位置获取天气信息
-  // getInfoBySelect(positionArr) {
-  //   let _this = this;
-  //   let arr = [];
-  //   for (let i in positionArr) {
-  //     arr[i] = positionArr[i].substr(0, 2);
-  //   }
-  //   switch (arr[0]) {
-  //     case '内蒙': arr[0] = '内蒙古'; break;
-  //     case '黑龙': arr[0] = '黑龙江'; break;
-  //   }
-  //   let query1 = arr[0] + arr[2],//省加区
-  //       query2 = arr[0] + arr[1];//省加市
+  getInfoBySelect(positionArr) {
+    let _this = this;
+    let arr = [];
+    for (let i in positionArr) {
+      arr[i] = positionArr[i].substr(0, 2);
+    }
+    switch (arr[0]) {
+      case '内蒙': arr[0] = '内蒙古'; break;
+      case '黑龙': arr[0] = '黑龙江'; break;
+    }
+    let query1 = arr[0] + arr[2],//省加区
+        query2 = arr[0] + arr[1];//省加市
 
-  //   // const {area, city} = this.getCityId(arr[1], arr[2])
-  //   // console.log(area,city)
-  //   const cityObj = this.getCityId(arr[1], arr[2])
-  //   console.log(cityObj)
-  //   console.log(cityObj.area.areaid)
-  //   // return new Promise((resolve, reject) => {
-  //   //   wx.request({
-  //   //     url: 'https://aider.meizu.com/app/weather/listWeather',
-  //   //     data: {
-  //   //       // cityIds: cityObj.area ? cityObj.area.areaid : cityObj.city.areaid
-  //   //       cityIds: cityObj.area.areaid
-  //   //     },
-  //   //     success(res) {
-  //   //       // console.log(ci)
-  //   //       console.log('----------')
-  //   //       console.log(res)
-  //   //       //如果按省+区没找到
-  //   //       // if (res.data.results.length != 0) {
-  //   //       //   let cityName = res.data.results[0].name;
-  //   //       //   wx.request({
-  //   //       //     url: 'https://weixin.jirengu.com/weather',
-  //   //       //     data: {
-  //   //       //       location: cityName,
-  //   //       //       key: 'study_javascript_in_jirengu.com'
-  //   //       //     },
-  //   //       //     success: function (res) {
-  //   //       //       _this.setData({
-  //   //       //         now: res.data.weather[0].now,
-  //   //       //         future: res.data.weather[0].future.splice(0, _this.data.days),
-  //   //       //         address: res.data.weather[0].city_name,
-  //   //       //         refresh_time: moment().format('HH:mm')
-  //   //       //       });
-  //   //       //       _this.setNavColor(_this.data.now.code);
-  //   //       //       resolve();
-  //   //       //     },
-  //   //       //     fail() {
-  //   //       //       console.log('fail')
-  //   //       //     }
-  //   //       //   })
-  //   //       // }
-  //   //       // //按省+市找
-  //   //       // else {
-  //   //       //   wx.request({
-  //   //       //     url: 'https://api.seniverse.com/v3/location/search.json?key=1jriv92unc4kjqqr',
-  //   //       //     data: {
-  //   //       //       q: query2
-  //   //       //     },
-  //   //       //     success: function (res) {
-  //   //       //       console.log(res)
-  //   //       //       let cityName = res.data.results[0].name
-
-  //   //       //       wx.request({
-  //   //       //         url: 'https://weixin.jirengu.com/weather',
-  //   //       //         data: {
-  //   //       //           location: cityName,
-  //   //       //           key: 'study_javascript_in_jirengu.com'
-  //   //       //         },
-  //   //       //         success: function (res) {
-  //   //       //           console.log(res)
-  //   //       //           _this.setData({
-  //   //       //             now: res.data.weather[0].now,
-  //   //       //             future: res.data.weather[0].future.splice(0, _this.data.days),
-  //   //       //             address: res.data.weather[0].city_name,
-  //   //       //             refresh_time: moment().format('HH:mm')
-  //   //       //           });
-
-  //   //       //           _this.setNavColor(_this.data.now.code);
-  //   //       //           resolve();
-  //   //       //         },
-  //   //       //         fail() {
-  //   //       //           console.log('fail')
-  //   //       //         }
-  //   //       //       })
-  //   //       //     },
-  //   //       //     fail() {
-  //   //       //       console.log('fail')
-  //   //       //     }
-  //   //       //   })
-  //   //       // }
-  //   //     },
-  //   //     fail() {
-  //   //       console.log('fail')
-  //   //     }
-  //   //   })
-  //   // })
-  // },
+    const cityObj = this.getCityId(arr[1], arr[2])
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://aider.meizu.com/app/weather/listWeather',
+        data: {
+          cityIds: cityObj.region ? cityObj.region.areaid : cityObj.city.areaid
+        },
+        success(res) {
+          console.log('----------')
+          console.log(res)
+          _this.setData({
+            now: {
+              aqi: res.data.value[0].pm25.aqi,
+              quality: res.data.value[0].pm25.quality,
+              ...res.data.value[0].realtime,              
+            },
+            future: res.data.value[0].weathers.splice(0, 6),
+            address: res.data.value[0].city,
+            refresh_time: moment().format('HH:mm')
+          });
+          _this.setNavColor(_this.data.now.img);
+          resolve()
+        },
+        fail() {
+          console.log('fail')
+        }
+      })
+    })
+  },
   //自动定位获取天气信息
-  // getWeatherInfo() {
-  //   let _this = this;
-  //   return new Promise((resolve, reject) => {
-  //     wx.getLocation({
-  //       success(res) {
-  //         console.log(res)
-  //         let locationQuery = res.latitude + ':' + res.longitude;
-  //         wx.request({
-  //           url: 'https://api.seniverse.com/v3/location/search.json?key=1jriv92unc4kjqqr',
-  //           data: {
-  //             q: locationQuery
-  //           },
-  //           success: function (res) {
-  //             console.log(res)
-  //             //直接name可能获取不到数据 要判断两次
-  //             let cityName = res.data.results[0].path.split(',')
-  //             wx.request({
-  //               url: 'https://weixin.jirengu.com/weather',
-  //               data: {
-  //                 location: cityName[0],
-  //                 key: 'study_javascript_in_jirengu.com'
-  //               },
-  //               success: function (res) {
-  //                 console.log(res)
-  //                 //没有获得到数据
-  //                 if (typeof res.data === 'string') {
-  //                   wx.request({
-  //                     url: 'https://weixin.jirengu.com/weather',
-  //                     data: {
-  //                       location: cityName[1],
-  //                       key: 'study_javascript_in_jirengu.com'
-  //                     },
-  //                     success: function (res) {
-  //                       console.log(res)
-  //                       _this.setData({
-  //                         now: res.data.weather[0].now,
-  //                         future: res.data.weather[0].future.splice(0, _this.data.days),
-  //                         address: res.data.weather[0].city_name,
-  //                         refresh_time: moment().format('HH:mm')
-  //                       });
-  //                       _this.setNavColor(_this.data.now.code);
-  //                       resolve();
-  //                     },
-  //                     fail() {
-  //                       console.log('fail')
-  //                     }
-  //                   })
-  //                 }
-  //                 //获取到数据
-  //                 else {
-  //                   _this.setData({
-  //                     now: res.data.weather[0].now,
-  //                     future: res.data.weather[0].future.splice(0, _this.data.days),
-  //                     address: res.data.weather[0].city_name,
-  //                     refresh_time: moment().format('HH:mm')
-  //                   });
-  //                   _this.setNavColor(_this.data.now.code);
-  //                   resolve();
-  //                 }
-  //               },
-  //               fail() {
-  //                 console.log('fail')
-  //               }
-  //             })
-  //           },
-  //           fail() {
-  //             console.log('fail')
-  //           }
-  //         })
-  //       },
-  //       fail() {
-  //         console.log('fail')
-  //       }
-  //     })
-  //   })
-  // },
+  getWeatherInfo() {
+    let _this = this;
+    return new Promise((resolve, reject) => {
+      wx.getLocation({
+        success(res) {
+          console.log(res)
+          let locationQuery = res.latitude + ':' + res.longitude;
+          wx.request({
+            url: 'https://api.seniverse.com/v3/location/search.json?key=1jriv92unc4kjqqr',
+            data: {
+              q: locationQuery
+            },
+            success: function (res) {
+              //直接name可能获取不到数据 要判断两次
+              let cityName = res.data.results[0].path.split(',')
+              
+              const cityObj = _this.getCityId(cityName[1], cityName[0])
+
+                wx.request({
+                  url: 'https://aider.meizu.com/app/weather/listWeather',
+                  data: {
+                    cityIds: cityObj.region ? cityObj.region.areaid : cityObj.city.areaid
+                  },
+                  success(res) {
+                    _this.setData({
+                      now: {
+                        aqi: res.data.value[0].pm25.aqi,
+                        quality: res.data.value[0].pm25.quality,
+                        ...res.data.value[0].realtime,
+                      },
+                      future: res.data.value[0].weathers.splice(0, 6),
+                      address: res.data.value[0].city,
+                      refresh_time: moment().format('HH:mm')
+                    });
+                    _this.setNavColor(_this.data.now.img);
+                    resolve()
+                  },
+                  fail() {
+                    console.log('fail')
+                  }
+                })
+            },
+            fail() {
+              console.log('fail')
+            }
+          })
+        },
+        fail() {
+          console.log('fail')
+        }
+      })
+    })
+  },
   //构建天气表信息
   createSimulationData() {
     let categories = [],
@@ -279,14 +202,14 @@ Page({
         low: []
       };
     for (let i of this.data.future) {
-      categories.push(i.day[1]);
-      data.high.push(i.high);
-      data.low.push(i.low)
+      categories.push(i.week[2]);
+      data.high.push(i.temp_day_c);
+      data.low.push(i.temp_night_c)
     }
     categories[0] = '今', categories[1] = '明';
     return {
-      categories: categories,
-      data: data
+      categories,
+      data
     }
   },
 
@@ -308,6 +231,7 @@ Page({
       success(res) {
         Promise.all([_this.refreshAnimation(), _this.getInfoBySelect(res.data.position)]).then(() => {
           var simulationData = _this.createSimulationData();
+
           lineChart = new wxCharts({
             canvasId: 'lineCanvas',
             type: 'line',
@@ -478,7 +402,7 @@ Page({
   },
   //根据不同天气的背景色设置nav颜色并关闭loading界面
   setNavColor(code) {
-    if (code >= 9) {
+    if (code >= 2) {
       wx.setNavigationBarColor({
         frontColor: '#ffffff',
         backgroundColor: '#6f979f'

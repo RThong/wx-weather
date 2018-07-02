@@ -1,4 +1,4 @@
- <view class="{{now.code>=9?'container cloudy-bg':'container sunny-bg'}}">
+ <view class="{{now.img>=2?'container cloudy-bg':'container sunny-bg'}}">
   <view class="top">
     <text class="address" bindtap="modalShow">{{address}}</text>
     <view class="refresh" bindtap="init">
@@ -10,30 +10,27 @@
   <view class="main">
     <view class="weather-wrap">
       <view class="info-box">
-        <view class="now-temperature">{{now.temperature}}°</view>
+        <view class="now-temperature">{{now.temp}}°</view>
         <view class="temp-range">
-          <text class="low-temp">{{future[0].low}}°</text>/
-          <text class="high-temp">{{future[0].high}}°</text>
+          <text class="low-temp">{{future[0].temp_night_c}}°</text>/
+          <text class="high-temp">{{future[0].temp_day_c}}°</text>
         </view>
         <view class="air-quality">
-          <text class="aqi">{{now.air_quality.city.aqi}}</text>
-          <text class="quality">{{now.air_quality.city.quality}}</text>
+          <text class="aqi">{{now.aqi}}</text>
+          <text class="quality">{{now.quality}}</text>
         </view>
       </view>
       <view class="info-box">
         <view>
-          <image wx:if="{{now.code == 21}}" style="width:55px;height:70px;" src="../../lib/images/{{now.code}}.png"></image>
-          <image wx:elif="{{now.code == 9}}" style="width:72px;height:50px;" src="../../lib/images/{{now.code}}.png"></image>
-          <image wx:else style="width:60px;height:60px;" src="../../lib/images/{{now.code}}.png"></image>
+          <image wx:if="{{now.img == 21}}" style="width:55px;height:70px;" src="../../lib/images/{{now.img}}.png"></image>
+          <image wx:elif="{{now.img == 2}}" style="width:72px;height:50px;" src="../../lib/images/{{now.img}}.png"></image>
+          <image wx:else style="width:60px;height:60px;" src="../../lib/images/{{now.img}}.png"></image>
         </view>
         <view class="temp-range">
-          <text class="weather-text">{{now.text}}</text>
+          <text class="weather-text">{{now.weather}}</text>
         </view>
         <view class="air-quality">
-          <text class="wind-scale">{{now.wind_scale}}</text>级
-          <text class="wind-name"><text wx:if="{{now.wind_scale<=3}}">微</text>
-          <text wx:elif="{{now.wind_scale>3&&now.wind_scale<=6}}">清</text>
-          <text wx:else>大</text>风</text>
+          <text class="wind-scale">{{now.ws}}</text>
         </view>
       </view>
     </view>
@@ -46,7 +43,7 @@
       </view>
       <view class="label">
         <view wx:for="{{future}}" wx:key="index" class="label-box">
-          <image style="{{item.code1==9?'width:20px;height:14px;margin-top:5px;':'width:20px;height:20px;'}}" src="../../lib/images/{{item.code1}}.png"></image>
+          <image style="{{item.img==2?'width:20px;height:14px;margin-top:5px;':'width:20px;height:20px;'}}" src="../../lib/images/{{item.img}}.png"></image>
         </view>
       </view>
     </view>
@@ -71,14 +68,14 @@
   </view>
 </modal>
 <view class="weather-bg">
- <image class="sunny" wx:if="{{now.code<=3?true:false}}" src="../../lib/images/sunny.png"></image> 
- <image class="cloud1" wx:if="{{now.code>=3&&now.code<=9?true:false}}" src="../../lib/images/cloud.png"></image>
-<image class="cloud2" wx:if="{{now.code>=3&&now.code<=9?true:false}}" src="../../lib/images/cloud.png"></image>
- <canvas style="width:100%;height:100%;" hidden="{{now.code>=10&&now.code<=20?false:true}}" canvas-id="rainCanvas" id="canvas1"></canvas>
- <canvas style="width:100%;height:100%;" hidden="{{now.code>=21&&now.code<=25?false:true}}" canvas-id="snowCanvas" id="canvas2"></canvas>
+ <image class="sunny" wx:if="{{now.img==0?true:false}}" src="../../lib/images/sunny.png"></image> 
+ <image class="cloud1" wx:if="{{now.img==1?true:false}}" src="../../lib/images/cloud.png"></image>
+<image class="cloud2" wx:if="{{now.img==2?true:false}}" src="../../lib/images/cloud.png"></image>
+  <canvas style="width:100%;height:100%;" wx:if="{{now.img >= 3 && now.img <= 12}}" canvas-id="rainCanvas" id="canvas1"></canvas> 
+  <canvas style="width:100%;height:100%;" wx:if="{{now.img>=13&&now.img<=18}}" canvas-id="snowCanvas" id="canvas2"></canvas> 
 </view> 
 
-<!-- <view class="{{now.code>=9?'loading cloudy-bg':'loading sunny-bg'}}" wx:if="{{loadingFlag}}">
+ <view class="{{now.img>=3?'loading cloudy-bg':'loading sunny-bg'}}" wx:if="{{loadingFlag}}">
   <view class="loading-container">
   <view class="stick-wrap">
 		<view class="stick"></view>
@@ -91,4 +88,4 @@
 		<view class="loading-text">Loading...</view>
 
 	</view>
-</view> -->
+</view> 

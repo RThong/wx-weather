@@ -100,7 +100,7 @@ page {
   height: 50%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+   justify-content: center; 
 }
 
 .top .address::before {
@@ -294,4 +294,11 @@ modal .position-wrap .position-selector {
 @keyframes fade {
 	50%{opacity:0.5}
 	100%{opacity:1}
+}
+
+
+#canvas1,#canvas2{
+  position: absolute;
+  top: 0;
+  left: 0;
 }
