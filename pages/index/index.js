@@ -224,7 +224,7 @@ Page({
     } catch (e) {
       console.error('getSystemInfoSync failed!');
     }
-
+    
     let _this = this;
     wx.getStorage({
       key: 'position',

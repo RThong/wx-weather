@@ -69,10 +69,10 @@
 </modal>
 <view class="weather-bg">
  <image class="sunny" wx:if="{{now.img==0?true:false}}" src="../../lib/images/sunny.png"></image> 
- <image class="cloud1" wx:if="{{now.img==1?true:false}}" src="../../lib/images/cloud.png"></image>
-<image class="cloud2" wx:if="{{now.img==2?true:false}}" src="../../lib/images/cloud.png"></image>
-  <canvas style="width:100%;height:100%;" wx:if="{{now.img >= 3 && now.img <= 12}}" canvas-id="rainCanvas" id="canvas1"></canvas> 
-  <canvas style="width:100%;height:100%;" wx:if="{{now.img>=13&&now.img<=18}}" canvas-id="snowCanvas" id="canvas2"></canvas> 
+ <image class="cloud1" wx:if="{{now.img>=1?true:false}}" src="../../lib/images/cloud.png"></image>
+<image class="cloud2" wx:if="{{now.img>=1?true:false}}" src="../../lib/images/cloud.png"></image>
+  <canvas style="width:100%;height:100%;" hidden="{{!(now.img >= 3 && now.img <= 12)}}" canvas-id="rainCanvas" id="canvas1"></canvas> 
+  <canvas style="width:100%;height:100%;" hidden="{{!(now.img>=13&&now.img<=18)}}" canvas-id="snowCanvas" id="canvas2"></canvas> 
 </view> 
 
  <view class="{{now.img>=3?'loading cloudy-bg':'loading sunny-bg'}}" wx:if="{{loadingFlag}}">
