@@ -16,7 +16,8 @@ Page({
     autoPosition: true,
     region: ['北京市', '北京市', '东城区'],
     canvasShow: false,//模态框弹出,表格消失
-    loadingFlag: true
+    loadingFlag: true,
+    animationIsHidden: true//动画效果在最顶层，控制多种条件下隐藏
   },
   onLoad: function (e) {
     this.init();
@@ -129,7 +130,7 @@ Page({
             },
             future: res.data.value[0].weathers.splice(0, 6),
             address: res.data.value[0].city,
-            refresh_time: moment().format('HH:mm')
+            refresh_time: moment().format('HH:mm'),
           });
           _this.setNavColor(_this.data.now.img);
           resolve()
